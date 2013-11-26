@@ -1,9 +1,29 @@
 """Tests for the template tags of the ``privacy`` app."""
+from django.template import Context, Template
 from django.test import TestCase
 
 from ..templatetags.privacy_tags import is_access_allowed
 from .factories import PrivacyLevelFactory, PrivacySettingFactory
 from test_app.factories import DummyProfileModelFactory, DummyModelFactory
+
+
+class RenderPrivacyLevelField(TestCase):
+    """Tests for the ``render_privacy_level_field``."""
+    longMessage = True
+
+    def setUp(self):
+        self.obj = DummyModelFactory()
+        self.level_1 = PrivacyLevelFactory(clearance_level=1)
+        self.level_2 = PrivacyLevelFactory(clearance_level=2)
+
+    def test_tag(self):
+        t = Template(
+            '{% load privacy_tags %}{% render_privacy_level_field obj %}')
+        c = Context({'obj': self.obj})
+        self.assertIn('name="privacy_settings_for_instance"', t.render(c))
+        t = Template('{% load privacy_tags %}{% render_privacy_level_field obj'
+                     ' "name" %}')
+        self.assertIn('name="privacy_settings_name"', t.render(c))
 
 
 class IsAccessAllowedTestCase(TestCase):

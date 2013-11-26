@@ -65,6 +65,13 @@ relation. E.g. ``'myproject.privacy_settings.get_clearance_level'``
 
 You can find an example in the ``test_app`` of this repository.
 
+PRIVACY_DEFAULT_CLEARANCE_LEVEL
++++++++++++++++++++++++++++++++
+
+Default: 1
+
+Default clearance level if a field has no one assigned.
+
 Usage
 -----
 
@@ -77,12 +84,24 @@ This assignment tag will check the relation of an object owner to the requester
 and will return a ``True`` or ``False``. You can check the level for the whole
 object or for a field of the object::
 
+    {% load privacy_tags %}
     {% is_access_allowed object.user request.user object 'first_name' as access_allowed %}
     {% if access_allowed %}
         {{ object.first_name }}
     {% endif %}
 
 --------------------------------------------------------------------------------
+
+``render_privacy_level_field``
+
+This inclusion tag will generate a privacy level next to your standard form
+field::
+
+    {% load privacy_tags %}
+    {% render_privacy_level_field form.instance %}
+    {% for field in form %}
+        {{ field }} {% render_privacy_level_field form.instance field.name %}
+    {% endfor %}
 
 
 Roadmap

@@ -8,6 +8,32 @@ from django.utils.translation import ugettext_lazy as _
 from hvad.models import TranslatableModel, TranslatedFields
 
 
+def filter_privacy_level(qs, clearance_level, exact=False):
+    """
+    Function to exclude objects from a queryset, which don't match the minimum
+    clearance level.
+
+    :qs: Django queryset.
+    :clearance_level: Minimum clearance level.
+    :exact: Boolean to check for the exact clearance level.
+
+    """
+    if not qs:
+        return qs
+    c_type = ContentType.objects.get_for_model(qs[0])
+    kwargs = {
+        'content_type': c_type,
+        'object_id__in': qs.values_list('pk'),
+        'level__clearance_level{}'.format(
+            '' if exact else '__lt'): clearance_level,
+    }
+    private_objects = PrivacySetting.objects.filter(**kwargs).values_list(
+        'object_id')
+    if exact:
+        return qs.filter(pk__in=private_objects)
+    return qs.exclude(pk__in=private_objects)
+
+
 class PrivacyLevel(TranslatableModel):
     """
     Privacy level, which defines the assessment factor.

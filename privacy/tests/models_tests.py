@@ -5,6 +5,9 @@ from .factories import (
     PrivacyLevelFactory,
     PrivacySettingFactory,
 )
+from ..models import filter_privacy_level
+from test_app.factories import DummyModelFactory
+from test_app.models import DummyModel
 
 
 class PrivacyLevelTestCase(TestCase):
@@ -29,3 +32,34 @@ class PrivacySettingTestCase(TestCase):
     def test_model(self):
         self.assertTrue(self.privacy_setting.pk, msg=(
             'Should be able to instantiate and save the object.'))
+
+
+class FilterPrivacyLevelTestCase(TestCase):
+    """Tests for the ``filter_privacy_level`` helper function."""
+    longMessage = True
+
+    def setUp(self):
+        self.dummy_1 = DummyModelFactory()
+        self.dummy_2 = DummyModelFactory()
+        self.dummy_3 = DummyModelFactory()
+
+    def test_model(self):
+        qs = []
+        self.assertFalse(filter_privacy_level(qs, 4), msg=(
+            'Should return the empty queryset, instead of raising an'
+            ' exception, if queryset has no objects.'))
+        qs = DummyModel.objects.all()
+        self.assertEqual(filter_privacy_level(qs, 4).count(), 3, msg=(
+            'Should return all objects, if they got no privacy settings.'))
+        PrivacySettingFactory(content_object=self.dummy_1,
+                              level__clearance_level=1)
+        PrivacySettingFactory(content_object=self.dummy_2,
+                              level__clearance_level=2)
+        PrivacySettingFactory(content_object=self.dummy_3,
+                              level__clearance_level=3)
+        self.assertEqual(filter_privacy_level(qs, 2).count(), 2, msg=(
+            'Should return only, objects, which match the right level.'))
+        self.assertEqual(filter_privacy_level(qs, 3).count(), 1, msg=(
+            'Should return only, objects, which match the right level.'))
+        self.assertEqual(filter_privacy_level(qs, 3, True).count(), 1, msg=(
+            'Should return only, objects, which exactly match the level.'))

@@ -100,7 +100,7 @@ field::
     {% load privacy_tags %}
     {% render_privacy_level_field form.instance %}
     {% for field in form %}
-        {{ field }} {% render_privacy_level_field form.instance field.name %}
+        {{ field }} {% render_privacy_level_field form.instance field.field.name %}
     {% endfor %}
 
 For carefree update forms use it with our ``PrivacyFormMixin`` (see below).
@@ -121,6 +121,26 @@ form and privacy settings will be saved::
         class Meta:
             model = MyModel
             fields = ('field1', 'field2')
+
+
+Queryset helper
++++++++++++++++
+
+If you want to filter querysets outside of templates (to keep pagination alive
+or to use custom model managers), you can use the following helper:
+
+``filter_privacy_level``
+
+Just pass a ``queryset`` and a ``clearance_level``. You can also filter for
+matching levels, just use ``exact``. An example::
+
+    class MyListView(ListView):
+        model = MyModel
+
+        def get_queryset(self):
+            qs = super(MyListView, self).get_queryset()
+            clearance_level = get_clearance_level(self.owner, self.request.user)
+            return filter_privacy_level(qs, clearance_level, self.request.GET.get('exact'))
 
 
 Roadmap

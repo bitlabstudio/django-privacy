@@ -68,7 +68,21 @@ You can find an example in the ``test_app`` of this repository.
 Usage
 -----
 
-TODO!
+Template Tags
++++++++++++++
+
+``is_access_allowed``
+
+This assignment tag will check the relation of an object owner to the requester
+and will return a ``True`` or ``False``. You can check the level for the whole
+object or for a field of the object::
+
+    {% is_access_allowed object.user request.user object 'first_name' as access_allowed %}
+    {% if access_allowed %}
+        {{ object.first_name }}
+    {% endif %}
+
+--------------------------------------------------------------------------------
 
 
 Roadmap

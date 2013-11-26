@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load privacy_tags %}
+
+{% block main %}
+    <form action="." method="post">
+        {% csrf_token %}
+        Privacy of {{ form.instance }}: {% render_privacy_level_field form.instance %}
+        {% for field in form %}
+            <p>{{ field }} {% render_privacy_level_field form.instance field.name %}</p>
+        {% endfor %}
+        <input type="submit" value="Update" />
+    </form>
+{% endblock %}

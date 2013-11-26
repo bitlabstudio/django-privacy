@@ -103,6 +103,25 @@ field::
         {{ field }} {% render_privacy_level_field form.instance field.name %}
     {% endfor %}
 
+For carefree update forms use it with our ``PrivacyFormMixin`` (see below).
+
+
+Form Mixin
+++++++++++
+
+``PrivacyFormMixin``
+
+This form mixin handles privacy related form data (in case you use our
+``render_privacy_level_field`` template tag). Just add the mixin class to your
+form and privacy settings will be saved::
+
+    from django import forms
+    from privacy.forms import PrivacyFormMixin
+    class MyModelForm(PrivacyFormMixin, forms.ModelForm):
+        class Meta:
+            model = MyModel
+            fields = ('field1', 'field2')
+
 
 Roadmap
 -------

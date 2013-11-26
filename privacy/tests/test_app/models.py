@@ -1,4 +1,5 @@
 """Dummy models to be used in test cases of the ``privacy`` app."""
+from django.core.urlresolvers import reverse
 from django.db import models
 
 
@@ -17,3 +18,6 @@ class DummyProfileModel(models.Model):
     user = models.ForeignKey('auth.User', related_name='dummy_profiles')
     friends = models.ManyToManyField('auth.User', blank=True, null=True,
                                      related_name='friended_dummy_profiles')
+
+    def get_absolute_url(self):
+        return reverse('dummy_profile_update', kwargs={'pk': self.pk})

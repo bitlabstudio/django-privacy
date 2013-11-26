@@ -7,8 +7,8 @@ from .factories import PrivacyLevelFactory, PrivacySettingFactory
 from test_app.factories import DummyProfileModelFactory, DummyModelFactory
 
 
-class RenderPrivacyLevelField(TestCase):
-    """Tests for the ``render_privacy_level_field``."""
+class RenderPrivacyLevelFieldTestCase(TestCase):
+    """Tests for the ``render_privacy_level_field`` inclusion tag."""
     longMessage = True
 
     def setUp(self):
@@ -20,14 +20,14 @@ class RenderPrivacyLevelField(TestCase):
         t = Template(
             '{% load privacy_tags %}{% render_privacy_level_field obj %}')
         c = Context({'obj': self.obj})
-        self.assertIn('name="privacy_settings_for_instance"', t.render(c))
+        self.assertIn('name="privacy_for_instance"', t.render(c))
         t = Template('{% load privacy_tags %}{% render_privacy_level_field obj'
                      ' "name" %}')
-        self.assertIn('name="privacy_settings_name"', t.render(c))
+        self.assertIn('name="privacy_name"', t.render(c))
 
 
 class IsAccessAllowedTestCase(TestCase):
-    """Tests for the ``is_access_allowed`` filter."""
+    """Tests for the ``is_access_allowed`` assignment tag."""
     longMessage = True
 
     def setUp(self):

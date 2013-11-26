@@ -3,6 +3,9 @@ import os
 
 DEBUG = True
 
+PRIVACY_CLEARANCE_LEVEL_FUNCTION = \
+    'test_app.privacy_settings.get_clearance_level'
+
 SITE_ID = 1
 
 DATABASES = {

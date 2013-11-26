@@ -55,6 +55,16 @@ Default: ['clearance_level']
 Ordering of the privacy levels. Use ``['-clearance_level']`` to reverse the
 ordering or e.g. ``['name']`` to sort by level names.
 
+PRIVACY_CLEARANCE_LEVEL_FUNCTION (mandatory)
+++++++++++++++++++++++++++++++++++++++++++++
+
+Default: None
+
+Custom function to return a privacy level instance for the owner/requester
+relation. E.g. ``'myproject.privacy_settings.get_clearance_level'``
+
+You can find an example in the ``test_app`` of this repository.
+
 Usage
 -----
 

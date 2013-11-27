@@ -10,8 +10,8 @@ from hvad.models import TranslatableModel, TranslatedFields
 
 def filter_privacy_level(qs, clearance_level, exact=False):
     """
-    Function to exclude objects from a queryset, which don't match the minimum
-    clearance level.
+    Function to exclude objects from a queryset, which got a higher clearance
+    level than the wanted maximum clearance level.
 
     :qs: Django queryset.
     :clearance_level: Minimum clearance level.
@@ -20,12 +20,12 @@ def filter_privacy_level(qs, clearance_level, exact=False):
     """
     if not qs:
         return qs
-    c_type = ContentType.objects.get_for_model(qs[0])
+    c_type = ContentType.objects.get_for_model(qs.model)
     kwargs = {
         'content_type': c_type,
         'object_id__in': qs.values_list('pk'),
         'level__clearance_level{}'.format(
-            '' if exact else '__lt'): clearance_level,
+            '' if exact else '__gt'): clearance_level,
     }
     private_objects = PrivacySetting.objects.filter(**kwargs).values_list(
         'object_id')

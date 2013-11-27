@@ -9,6 +9,13 @@ decide where and how to publish their content.
 Some might want to hide everything from public, some might want to show private
 updates to friends or colleagues only.
 
+We define clearance levels to allow access or not. The lowest level is the
+least secure. E.g.:
+
+* Level 1: Everyone can see the content.
+* Level 2: Only connected users can see the content.
+* Level 3: Only the user herself can see the content.
+
 This app provides the backend for custom functions to (not) display content.
 
 Prerequisites

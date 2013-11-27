@@ -57,9 +57,11 @@ class FilterPrivacyLevelTestCase(TestCase):
                               level__clearance_level=2)
         PrivacySettingFactory(content_object=self.dummy_3,
                               level__clearance_level=3)
+        self.assertEqual(filter_privacy_level(qs, 1).count(), 1, msg=(
+            'Should return only objects, which got level 1 or lower.'))
         self.assertEqual(filter_privacy_level(qs, 2).count(), 2, msg=(
-            'Should return only, objects, which match the right level.'))
-        self.assertEqual(filter_privacy_level(qs, 3).count(), 1, msg=(
-            'Should return only, objects, which match the right level.'))
+            'Should return only objects, which got level 2 or lower.'))
+        self.assertEqual(filter_privacy_level(qs, 3).count(), 3, msg=(
+            'Should return only objects, which got level 3 or lower.'))
         self.assertEqual(filter_privacy_level(qs, 3, True).count(), 1, msg=(
-            'Should return only, objects, which exactly match the level.'))
+            'Should return only objects, which got level 3 exactly.'))

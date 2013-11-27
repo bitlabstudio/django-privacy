@@ -77,7 +77,7 @@ PRIVACY_DEFAULT_CLEARANCE_LEVEL
 
 Default: 1
 
-Default clearance level if a field has no one assigned.
+Default clearance level if a field has no privacy setting assigned.
 
 Usage
 -----

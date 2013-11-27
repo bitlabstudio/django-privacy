@@ -23,17 +23,15 @@ def render_privacy_level_field(obj, field_name=None):
         kwargs.update({'field_name': ''})
     privacy_levels = PrivacyLevel.objects.all()
     try:
-        privacy_setting = PrivacySetting.objects.get(**kwargs)
+        selected_level = PrivacySetting.objects.get(
+            **kwargs).level.clearance_level
     except PrivacySetting.DoesNotExist:
-        kwargs.update({
-            'level': privacy_levels.get(clearance_level=getattr(
-                settings, 'PRIVACY_DEFAULT_CLEARANCE_LEVEL', 1)),
-        })
-        privacy_setting = PrivacySetting.objects.create(**kwargs)
+        selected_level = getattr(
+            settings, 'PRIVACY_DEFAULT_CLEARANCE_LEVEL', 1)
     return {
         'field_name': field_name,
         'privacy_levels': privacy_levels,
-        'privacy_setting': privacy_setting,
+        'selected_level': selected_level,
     }
 
 

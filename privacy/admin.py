@@ -7,4 +7,4 @@ from .models import PrivacyLevel, PrivacySetting
 
 
 admin.site.register(PrivacyLevel, TranslatableAdmin)
-admin.site.register(PrivacySetting, TranslatableAdmin)
+admin.site.register(PrivacySetting, admin.ModelAdmin)

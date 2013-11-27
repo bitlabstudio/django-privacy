@@ -1,5 +1,5 @@
 <select name="{% if field_name %}privacy_{{ field_name }}{% else %}privacy_for_instance{% endif %}" id="id_{% if field_name %}privacy_{{ field_name }}{% else %}privacy_for_instance{% endif %}">
     {% for option in privacy_levels %}
-        <option value="{{ option.clearance_level }}" {% if option.clearance_level == privacy_setting.level.clearance_level %}selected="selected"{% endif %}>{{ option.name }}</option>
+        <option value="{{ option.clearance_level }}" {% if option.clearance_level == selected_level %}selected="selected"{% endif %}>{{ option.name }}</option>
     {% endfor %}
 </select>

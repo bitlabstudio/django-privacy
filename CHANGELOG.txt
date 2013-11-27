@@ -1,5 +1,9 @@
 === ongoing ===
 
+=== 0.1.1 ===
+
+- Fixed helper
+
 === 0.1 ===
 
 - Initial commit

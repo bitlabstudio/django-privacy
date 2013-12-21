@@ -41,8 +41,8 @@ def get_privacy_dict(obj, field_name):
     }
 
 
-@register.filter
-def get_privacy_level(obj, field_name=None):
+@register.assignment_tag
+def get_privacy_setting(obj, field_name=None):
     privacy_dict = get_privacy_dict(obj, field_name)
     return privacy_dict['selected_setting']
 

@@ -2,13 +2,13 @@
 from django.template import Context, Template
 from django.test import TestCase
 
-from ..templatetags.privacy_tags import is_access_allowed, get_privacy_level
+from ..templatetags.privacy_tags import is_access_allowed, get_privacy_setting
 from .factories import PrivacyLevelFactory, PrivacySettingFactory
 from test_app.factories import DummyProfileModelFactory, DummyModelFactory
 
 
-class GetPrivacyLevelTestCase(TestCase):
-    """Tests for the ``get_privacy_level`` filter tag."""
+class GetPrivacySettingTestCase(TestCase):
+    """Tests for the ``get_privacy_setting`` filter tag."""
     longMessage = True
 
     def setUp(self):
@@ -17,11 +17,11 @@ class GetPrivacyLevelTestCase(TestCase):
         self.level_2 = PrivacyLevelFactory(clearance_level=2)
 
     def test_tag(self):
-        self.assertIsNone(get_privacy_level(self.obj), msg=(
+        self.assertIsNone(get_privacy_setting(self.obj), msg=(
             'Should return None, if there\'s no setting set.'))
         PrivacySettingFactory(level=self.level_1, content_object=self.obj)
         self.assertEqual(
-            get_privacy_level(self.obj).level.clearance_level, 1, msg=(
+            get_privacy_setting(self.obj).level.clearance_level, 1, msg=(
                 'Should return the privacy setting.'))
 
 

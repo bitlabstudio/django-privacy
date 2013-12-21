@@ -113,6 +113,19 @@ field::
 For carefree update forms use it with our ``PrivacyFormMixin`` (see below).
 
 
+--------------------------------------------------------------------------------
+
+``get_privacy_setting``
+
+This assignment tag will return the current privacy setting::
+
+    {% load privacy_tags %}
+    {% get_privacy_setting form.instance 'name' as current_setting %}
+
+The tag can be used with a field name or without to get the setting of the
+whole object.
+
+
 Form Mixin
 ++++++++++
 

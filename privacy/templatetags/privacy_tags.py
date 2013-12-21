@@ -11,8 +11,12 @@ from ..models import PrivacyLevel, PrivacySetting
 register = Library()
 
 
-@register.inclusion_tag('privacy/partials/field.html')
-def render_privacy_level_field(obj, field_name=None):
+def get_privacy_dict(obj, field_name):
+    """
+    Function, which returns a dictionary of relevant data of a privacy level
+    (field).
+
+    """
     kwargs = {
         'content_type': ContentType.objects.get_for_model(obj),
         'object_id': obj.pk,
@@ -23,16 +27,29 @@ def render_privacy_level_field(obj, field_name=None):
         kwargs.update({'field_name': ''})
     privacy_levels = PrivacyLevel.objects.all()
     try:
-        selected_level = PrivacySetting.objects.get(
-            **kwargs).level.clearance_level
+        selected_setting = PrivacySetting.objects.get(**kwargs)
+        selected_level = selected_setting.level.clearance_level
     except PrivacySetting.DoesNotExist:
+        selected_setting = None
         selected_level = getattr(
             settings, 'PRIVACY_DEFAULT_CLEARANCE_LEVEL', 1)
     return {
         'field_name': field_name,
         'privacy_levels': privacy_levels,
         'selected_level': selected_level,
+        'selected_setting': selected_setting,
     }
+
+
+@register.filter
+def get_privacy_level(obj, field_name=None):
+    privacy_dict = get_privacy_dict(obj, field_name)
+    return privacy_dict['selected_setting']
+
+
+@register.inclusion_tag('privacy/partials/field.html')
+def render_privacy_level_field(obj, field_name=None):
+    return get_privacy_dict(obj, field_name)
 
 
 def is_access_allowed(owner, requester, obj, field_name=None):
